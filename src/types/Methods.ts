@@ -1,1 +1,5 @@
-export type FilterMethods = 'All' | 'Completed' | 'Active';
+export enum FilterMethods {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}

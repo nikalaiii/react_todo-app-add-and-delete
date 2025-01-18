@@ -2,7 +2,6 @@ import { handleDelete } from '../functions';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
 import { TodoLoading } from './TodoLoading';
-import { RefObject, useState } from 'react';
 
 interface MainProps {
   todos: Todo[];
@@ -22,17 +21,18 @@ export const Main: React.FC<MainProps> = ({
   deleting,
   handleFocus,
 }) => {
-
   return (
     <section className="todoapp__main" data-cy="TodoList">
       {todos.map(todo => (
         <TodoItem
-        key={todo.id}
-        todo={todo}
-        onDelete={() => handleDelete(todo, setDeleting, renderTodos, newError)}
-        isDeleting={deleting.includes(todo.id)}
-        handleFocus={handleFocus}
-      />
+          key={todo.id}
+          todo={todo}
+          onDelete={() =>
+            handleDelete(todo, setDeleting, renderTodos, newError)
+          }
+          isDeleting={deleting.includes(todo.id)}
+          handleFocus={handleFocus}
+        />
       ))}
       {tempTodo && <TodoLoading title={tempTodo.title} />}
     </section>

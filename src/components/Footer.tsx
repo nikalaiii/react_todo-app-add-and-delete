@@ -22,13 +22,13 @@ export const Footer: React.FC<FooterProps> = ({
   setDeleting,
   newError,
 }) => {
-    const clearCompleted = () => {
-      for (const todo of todos) {
-        if (todo.completed === true) {
-          handleDelete(todo, setDeleting, renderTodos, newError);
-        }
+  const clearCompleted = () => {
+    for (const todo of todos) {
+      if (todo.completed === true) {
+        handleDelete(todo, setDeleting, renderTodos, newError);
       }
-    };
+    }
+  };
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({
           data-cy="FilterLinkAll"
           onClick={e => {
             e.preventDefault();
-            setFilter('All');
+            setFilter(FilterMethods.All);
           }}
         >
           All
@@ -62,7 +62,7 @@ export const Footer: React.FC<FooterProps> = ({
           data-cy="FilterLinkActive"
           onClick={e => {
             e.preventDefault();
-            setFilter('Active');
+            setFilter(FilterMethods.Active);
           }}
         >
           Active
@@ -78,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({
           data-cy="FilterLinkCompleted"
           onClick={e => {
             e.preventDefault();
-            setFilter('Completed');
+            setFilter(FilterMethods.Completed);
           }}
         >
           Completed

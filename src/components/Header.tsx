@@ -9,7 +9,7 @@ interface HeaderProps {
   onTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   formValue: string;
   changeFormValue: (value: string) => void;
-  setloadTodo: (value: Todo | null) => void; 
+  setloadTodo: (value: Todo | null) => void;
   inputRef: RefObject<HTMLInputElement>;
   handleFocus: () => void;
 }
@@ -28,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
   async function handeSubmit(title: string) {
     if (title.trim().length === 0) {
       onError('Title should not be empty');
+
       return;
     }
 
@@ -43,10 +44,11 @@ export const Header: React.FC<HeaderProps> = ({
       setloadTodo({ ...tempTodo, id: 0 });
 
       const newTodo = await addTodo(tempTodo);
+
       setloadTodo(null);
       onTodos(prev => [...prev, newTodo]);
       changeFormValue(''); // Очищення після успішного виконання
-    } catch (error: any) {
+    } catch (error: unknown) {
       onError(''); // Скидаємо попереднє повідомлення
       setTimeout(() => onError('Unable to add a todo'), 0); // Встановлюємо нове
       setloadTodo(null);

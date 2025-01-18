@@ -21,10 +21,10 @@ export const App: React.FC = () => {
   const [loadTodo, setLoadTodo] = useState<Todo | null>(null);
   const [deleting, setDeleting] = useState<number[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   const handleFocus = () => {
     inputRef.current?.focus();
-  }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -62,19 +62,19 @@ export const App: React.FC = () => {
     return filtered.length;
   };
 
-  function filterTodos(elements: Todo[], method: FilterMethods) {
+  function filterTodos(elements: Todo[], method: FilterMethods): Todo[] {
     let copyForFilter = [...elements];
 
-    if (method === 'All') {
+    if (method === FilterMethods.All) {
       return elements;
     }
 
-    if (method === 'Active') {
-      copyForFilter = copyForFilter.filter(el => el.completed === false);
+    if (method === FilterMethods.Active) {
+      copyForFilter = copyForFilter.filter(el => !el.completed);
     }
 
-    if (method === 'Completed') {
-      copyForFilter = copyForFilter.filter(el => el.completed === true);
+    if (method === FilterMethods.Completed) {
+      copyForFilter = copyForFilter.filter(el => el.completed);
     }
 
     return copyForFilter;

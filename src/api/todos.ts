@@ -1,4 +1,3 @@
-import { url } from 'inspector';
 import { Todo } from '../types/Todo';
 import { client } from '../utils/fetchClient';
 
@@ -15,5 +14,5 @@ export const addTodo = (todoData: Omit<Todo, 'id'>) => {
 };
 
 export const deleteTodo = (todo: Todo) => {
-  return client.delete(`/todos/${todo.id}`)
-}
+  return client.delete(`/todos/${todo.id}`);
+};
