@@ -1,10 +1,15 @@
-import classNames from 'classnames';
-import { Todo } from '../types/Todo';
+import classNames from "classnames";
+import { Todo } from "../types/Todo";
+
+
 interface Props {
   todo: Todo;
+  onDelete: () => void;
+  isDeleting: boolean;
+  handleFocus: () => void;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo }) => {
+export const TodoItem: React.FC<Props> = ({ todo, onDelete, isDeleting, handleFocus }) => {
   return (
     <div
       data-cy="Todo"
@@ -16,22 +21,29 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
-          id={`todo-status-${todo.id}`} // Додаємо унікальний id
-          checked={todo.completed}
+          id={`todo-status-${todo.id}`}
+          defaultChecked={todo.completed}
         />
       </label>
 
       <span data-cy="TodoTitle" className="todo__title">
         {todo.title}
       </span>
-      <button type="button" className="todo__remove" data-cy="TodoDelete">
+      <button
+        type="button"
+        className="todo__remove"
+        data-cy="TodoDelete"
+        onClick={() => {onDelete(); handleFocus()}}
+      >
         ×
       </button>
 
-      <div data-cy="TodoLoader" className="modal overlay">
-        <div className="modal-background has-background-white-ter" />
-        <div className="loader" />
-      </div>
+      
+        <div data-cy="TodoLoader" className={classNames(isDeleting ? "modal overlay is-active" : "modal overlay")}>
+          <div className="modal-background has-background-white-ter" />
+          <div className="loader" />
+        </div>
+      
     </div>
   );
 };

@@ -1,5 +1,6 @@
+import { RefObject, useState } from 'react';
 import { USER_ID } from '../api/todos';
-import { client } from '../utils/fetchClient';
+import { addTodo } from '../api/todos';
 import { Todo } from '../types/Todo';
 import { Form } from './Form';
 
@@ -8,6 +9,9 @@ interface HeaderProps {
   onTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   formValue: string;
   changeFormValue: (value: string) => void;
+  setloadTodo: (value: Todo | null) => void; 
+  inputRef: RefObject<HTMLInputElement>;
+  handleFocus: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -15,33 +19,50 @@ export const Header: React.FC<HeaderProps> = ({
   onTodos,
   formValue,
   changeFormValue,
+  setloadTodo,
+  inputRef,
+  handleFocus,
 }) => {
-  const addTodo = async (ev: React.FormEvent) => {
-    ev.preventDefault();
+  const [isDisabled, setDisabled] = useState(false);
 
-    if (!formValue.trim()) {
-      onError('Value is empty');
-
+  async function handeSubmit(title: string) {
+    if (title.trim().length === 0) {
+      onError('Title should not be empty');
       return;
     }
 
-    const newTodo = {
-      title: formValue,
-      userId: USER_ID,
-      completed: false,
-    };
-
     try {
-      const addedTodo = await client.post<Todo>('todos/', newTodo);
+      setDisabled(true);
 
-      onTodos(current => [...current, addedTodo]);
-      changeFormValue('');
-    } catch {
-      onError('Unable to add a new todo. Please try again.');
+      const tempTodo: Omit<Todo, 'id'> = {
+        userId: USER_ID,
+        title: title.trim(),
+        completed: false,
+      };
+
+      setloadTodo({ ...tempTodo, id: 0 });
+
+      const newTodo = await addTodo(tempTodo);
+      setloadTodo(null);
+      onTodos(prev => [...prev, newTodo]);
+      changeFormValue(''); // Очищення після успішного виконання
+    } catch (error: any) {
+      onError(''); // Скидаємо попереднє повідомлення
+      setTimeout(() => onError('Unable to add a todo'), 0); // Встановлюємо нове
+      setloadTodo(null);
+    } finally {
+      setDisabled(false);
+      handleFocus();
     }
-  };
+  }
 
   return (
-    <Form onSubmit={addTodo} fValue={formValue} onChange={changeFormValue} />
+    <Form
+      onSubmit={handeSubmit}
+      fValue={formValue}
+      onChange={changeFormValue}
+      isDisabled={isDisabled}
+      inputRef={inputRef}
+    />
   );
 };

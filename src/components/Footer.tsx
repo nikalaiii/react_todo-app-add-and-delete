@@ -1,13 +1,16 @@
 import classNames from 'classnames';
 import { Todo } from '../types/Todo';
 import { FilterMethods } from '../types/Methods';
+import { handleDelete } from '../functions';
 
 interface FooterProps {
   checkCount: (todos: Todo[]) => number;
   setFilter: (string: FilterMethods) => void;
   todos: Todo[];
   filterMethod: FilterMethods;
-  clear: () => void;
+  renderTodos: (todos: Todo[]) => void;
+  setDeleting: (todo: Todo) => void;
+  newError: (value: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -15,8 +18,18 @@ export const Footer: React.FC<FooterProps> = ({
   setFilter,
   todos,
   filterMethod,
-  clear,
+  renderTodos,
+  setDeleting,
+  newError,
 }) => {
+    const clearCompleted = () => {
+      for (const todo of todos) {
+        if (todo.completed === true) {
+          handleDelete(todo, setDeleting, renderTodos, newError);
+        }
+      }
+    };
+
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
@@ -80,7 +93,7 @@ export const Footer: React.FC<FooterProps> = ({
           data-cy="ClearCompletedButton"
           onClick={e => {
             e.preventDefault();
-            clear();
+            clearCompleted();
           }}
         >
           Clear completed

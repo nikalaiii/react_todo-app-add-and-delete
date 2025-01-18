@@ -2,23 +2,29 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
-import { getTodos, USER_ID } from './api/todos';
 import { Todo } from './types/Todo';
-import { TodoItem } from './components/TodoItem';
 import { Footer } from './components/Footer';
 import { FilterMethods } from './types/Methods';
 import { Error } from './components/Error';
 import { Header } from './components/Header';
+import { Main } from './components/Main';
+import { getTodos, USER_ID } from './api/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [error, setError] = useState<string | null>('');
   const [loading, setLoading] = useState(false);
   const [formValue, setFormValue] = useState('');
-
   const [filterMethod, setFilterMethod] = useState<FilterMethods>('All');
+  const [loadTodo, setLoadTodo] = useState<Todo | null>(null);
+  const [deleting, setDeleting] = useState<number[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  const handleFocus = () => {
+    inputRef.current?.focus();
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -56,15 +62,11 @@ export const App: React.FC = () => {
     return filtered.length;
   };
 
-  const clearCompleted = () => {
-    setTodos(current => current.filter(el => el.completed === false));
-  };
-
   function filterTodos(elements: Todo[], method: FilterMethods) {
     let copyForFilter = [...elements];
 
     if (method === 'All') {
-      return todos;
+      return elements;
     }
 
     if (method === 'Active') {
@@ -100,13 +102,20 @@ export const App: React.FC = () => {
           formValue={formValue}
           onTodos={setTodos}
           changeFormValue={setFormValue}
+          setloadTodo={setLoadTodo}
+          inputRef={inputRef}
+          handeFocus={handleFocus}
         />
 
-        <section className="todoapp__main" data-cy="TodoList">
-          {visibleTodos.map(todo => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))}
-        </section>
+        <Main
+          todos={visibleTodos}
+          tempTodo={loadTodo}
+          newError={setError}
+          renderTodos={setTodos}
+          setDeleting={setDeleting}
+          deleting={deleting}
+          handleFocus={handleFocus}
+        />
 
         {/* Hide the footer if there are no todos */}
         {todos.length > 0 && (
@@ -115,7 +124,9 @@ export const App: React.FC = () => {
             setFilter={setFilterMethod}
             todos={todos}
             filterMethod={filterMethod}
-            clear={clearCompleted}
+            renderTodos={setTodos}
+            setDeleting={setDeleting}
+            newError={setError}
           />
         )}
       </div>
