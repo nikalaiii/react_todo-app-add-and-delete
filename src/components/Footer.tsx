@@ -23,11 +23,11 @@ export const Footer: React.FC<FooterProps> = ({
   newError,
 }) => {
   const clearCompleted = () => {
-    for (const todo of todos) {
-      if (todo.completed === true) {
+    todos.forEach(todo => {
+      if (todo.completed) {
         handleDelete(todo, setDeleting, renderTodos, newError);
       }
-    }
+    });
   };
 
   return (
@@ -40,9 +40,9 @@ export const Footer: React.FC<FooterProps> = ({
       <nav className="filter" data-cy="Filter">
         <a
           href="#/"
-          className={classNames(
-            filterMethod === 'All' ? 'filter__link selected' : 'filter__link',
-          )}
+          className={classNames('filter__link', {
+            selected: filterMethod === FilterMethods.All,
+          })}
           data-cy="FilterLinkAll"
           onClick={e => {
             e.preventDefault();
@@ -54,11 +54,9 @@ export const Footer: React.FC<FooterProps> = ({
 
         <a
           href="#/active"
-          className={classNames(
-            filterMethod === 'Active'
-              ? 'filter__link selected'
-              : 'filter__link',
-          )}
+          className={classNames('filter__link', {
+            selected: filterMethod === FilterMethods.Active,
+          })}
           data-cy="FilterLinkActive"
           onClick={e => {
             e.preventDefault();
@@ -70,11 +68,9 @@ export const Footer: React.FC<FooterProps> = ({
 
         <a
           href="#/completed"
-          className={classNames(
-            filterMethod === 'Completed'
-              ? 'filter__link selected'
-              : 'filter__link',
-          )}
+          className={classNames('filter__link', {
+            selected: filterMethod === FilterMethods.Completed,
+          })}
           data-cy="FilterLinkCompleted"
           onClick={e => {
             e.preventDefault();

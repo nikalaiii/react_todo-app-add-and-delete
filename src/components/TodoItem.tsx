@@ -14,10 +14,15 @@ export const TodoItem: React.FC<Props> = ({
   isDeleting,
   handleFocus,
 }) => {
+  const handleDeleteAndFocus = () => {
+    onDelete();
+    handleFocus();
+  };
+
   return (
     <div
       data-cy="Todo"
-      className={classNames(todo.completed ? 'todo completed' : 'todo')}
+      className={classNames('todo', { completed: todo.completed })}
       key={todo.id}
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -39,8 +44,7 @@ export const TodoItem: React.FC<Props> = ({
         className="todo__remove"
         data-cy="TodoDelete"
         onClick={() => {
-          onDelete();
-          handleFocus();
+          handleDeleteAndFocus();
         }}
       >
         ×
@@ -48,9 +52,7 @@ export const TodoItem: React.FC<Props> = ({
 
       <div
         data-cy="TodoLoader"
-        className={classNames(
-          isDeleting ? 'modal overlay is-active' : 'modal overlay',
-        )}
+        className={classNames('modal', 'overlay', { 'is-active': isDeleting })}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

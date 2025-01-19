@@ -17,7 +17,9 @@ export const App: React.FC = () => {
   const [error, setError] = useState<string | null>('');
   const [loading, setLoading] = useState(false);
   const [formValue, setFormValue] = useState('');
-  const [filterMethod, setFilterMethod] = useState<FilterMethods>('All');
+  const [filterMethod, setFilterMethod] = useState<FilterMethods>(
+    FilterMethods.All,
+  );
   const [loadTodo, setLoadTodo] = useState<Todo | null>(null);
   const [deleting, setDeleting] = useState<number[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);

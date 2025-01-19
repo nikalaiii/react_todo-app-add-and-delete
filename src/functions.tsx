@@ -17,3 +17,7 @@ export const handleDelete = async (
     setDeleting(prev => prev.filter(id => id !== todo.id));
   }
 };
+
+export const handleFocus = () => {
+  inputRef.current?.focus();
+};

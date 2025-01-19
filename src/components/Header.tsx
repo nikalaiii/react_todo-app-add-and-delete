@@ -47,10 +47,10 @@ export const Header: React.FC<HeaderProps> = ({
 
       setloadTodo(null);
       onTodos(prev => [...prev, newTodo]);
-      changeFormValue(''); // Очищення після успішного виконання
+      changeFormValue('');
     } catch (error: unknown) {
-      onError(''); // Скидаємо попереднє повідомлення
-      setTimeout(() => onError('Unable to add a todo'), 0); // Встановлюємо нове
+      onError('');
+      setTimeout(() => onError('Unable to add a todo'), 0);
       setloadTodo(null);
     } finally {
       setDisabled(false);
